@@ -17,13 +17,13 @@
         <!-- <setting name="callSettersOnNulls" value="true" /> -->
     </settings>
     
-    <typeAliases>
+<!--     <typeAliases>
         <typeAlias alias="ShelterVO" type="com.example.juntos.vo.ShelterVO"/>
-    </typeAliases>
+    </typeAliases> -->
  
     <!-- MyBatis mapper 파일이 추가될 때마다 지정 -->
     <mappers>
-        <mapper resource="ShelterMapper.xml"/>
+        <mapper resource="mapper/TestMapper.xml"/>
     </mappers>
     
 </configuration>
