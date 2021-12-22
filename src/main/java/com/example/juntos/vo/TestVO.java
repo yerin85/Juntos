@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class TestVO {
-    private int id;
-    private String name;
+    private int upKindCd; //축종코드
+    private String upKindNm; //축종명
 }

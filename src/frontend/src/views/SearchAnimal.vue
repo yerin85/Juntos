@@ -3,12 +3,12 @@
     <!-- 검색옵션 -->
     <el-row :gutter="20">
       <el-col :span="8">
-      <el-select v-model="value" multiple clearable placeholder="Select" style="float: right" >
+      <el-select v-model="value" clearable placeholder="Select" style="float: right" >
         <el-option
           v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
+          :key="item.upKindCd"
+          :label="item.upKindNm"
+          :value="item.upKindCd">
         </el-option>
       </el-select>
       </el-col>
@@ -17,7 +17,8 @@
       </el-input>
       </el-col>
        <el-col :span="8">
-      <el-button icon="el-icon-search" style="float: left" circle ></el-button>
+      <el-button icon="el-icon-search" style="float: left" circle 
+       @click="searchAnimal"></el-button>
       </el-col>
     </el-row>
 
@@ -60,38 +61,57 @@ export default {
       return {
         searchword: '',
         items: [],
-        options: [{
-          value: '417000',
-          label: '개'
-        }, {
-          value: '422400',
-          label: '고양이'
-        }, {
-          value: '429900',
-          label: '기타'
-        }],
+        options: [],
         value: ''
+      }
+    },
+    methods: {
+      searchAnimal(){
+        var up_kind_cd = this.value; 
+
+        if(up_kind_cd == ''){
+          alert('선택'); 
+          return; //함수 빠져나가기
+        }
+        
+        var url = '/openapi/service/rest/abandonmentPublicSrvc/kind';
+        const key = 'PizA5duILWkq9mMFf%2Bf9ti3l0fAP1g79ezIZSirAbtMCIcb90puBIJ3qBgcOE8H2RbdBSctpdCHMTASuKhpmbw%3D%3D';
+        var queryParams = '?' + encodeURIComponent('up_kind_cd') + '=' + up_kind_cd + '&' + encodeURIComponent('serviceKey') + '='+key; 
+
+        console.log(url+queryParams)
+
+        this.$http.get(url+queryParams)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        })
       }
     },
     created(){
 
-      var url = '/openapi/service/rest/abandonmentPublicSrvc/abandonmentPublic'; /*URL*/
-      const key = 'PizA5duILWkq9mMFf%2Bf9ti3l0fAP1g79ezIZSirAbtMCIcb90puBIJ3qBgcOE8H2RbdBSctpdCHMTASuKhpmbw%3D%3D';
-      var queryParams = '?' + encodeURIComponent('serviceKey') + '='+key; /*Service Key*/
+      //upckind option box data갖고오기
+      this.$http.get("http://localhost:8080/api/test2")
+      .then((response) => {
+        this.options = response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      }) 
+
+     // var url = '/openapi/service/rest/abandonmentPublicSrvc/abandonmentPublic'; /*URL*/
+    //  const key = 'PizA5duILWkq9mMFf%2Bf9ti3l0fAP1g79ezIZSirAbtMCIcb90puBIJ3qBgcOE8H2RbdBSctpdCHMTASuKhpmbw%3D%3D';
+   //   var queryParams = '?' + encodeURIComponent('serviceKey') + '='+key; /*Service Key*/
       
-      this.$http.get(url+queryParams)
+     /*  this.$http.get(url+queryParams)
       .then((response) => { //ES5로 쓰면 데이터가 담기지 않음.. 출력은 되는데 데이터 담는건 불가 왜 그런지 찾아보기 
-        /* var xml = response.data.response.body;
-        console.log(xml)
-        var json = convert.xml2json(xml, { compact: true })
-        this.items = JSON.parse(json) */
-        
         this.items = response.data.response.body.items.item
         console.log(this.items)
       })
       .catch((error) => {
         console.log(error);
-      })
+      }) */
     }
   }
 

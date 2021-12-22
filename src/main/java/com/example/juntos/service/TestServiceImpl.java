@@ -15,7 +15,7 @@ public class TestServiceImpl implements TestService{
     private TestDAO testDAO;
 
     @Override
-    public List<TestVO> getTestList() throws Exception {
-        return testDAO.getTestList();
+    public List<TestVO> getUpKindList() throws Exception {
+        return testDAO.getUpKindList();
     }
 }

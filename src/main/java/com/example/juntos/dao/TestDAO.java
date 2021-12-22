@@ -16,7 +16,7 @@ public class TestDAO {
 
     private static String namespace = "com.example.juntos.dao.mapper.TestMapper";
 
-    public List<TestVO> getTestList() throws Exception{
-        return sqlSession.selectList(namespace + ".getTestList");
+    public List<TestVO> getUpKindList() throws Exception{
+        return sqlSession.selectList(namespace + ".getUpKindList");
     }
 }

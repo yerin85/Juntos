@@ -10,6 +10,12 @@ module.exports = {
                 target: 'http://localhost:8091', //vue dev서버에서 localhost:8080/api로 오는 요청을 받으면 localhost:8090/api를 향해 다시 해당 요청을 다시 쏴줌
                 changeOrigin: true,
             },
+            '/':{
+                target: 'http://openapi.animal.go.kr',
+                pathRewrite: {'^/': ''},
+                changeOrigin: true,
+                secure: false
+            }
         }
     }
     ,
