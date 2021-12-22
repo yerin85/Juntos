@@ -3,7 +3,7 @@
     <!-- 검색옵션 -->
     <el-row :gutter="20">
       <el-col :span="8">
-      <el-select v-model="value" clearable placeholder="Select" style="float: right" >
+      <el-select v-model="upkind" clearable placeholder="Select" style="float: right" >
         <el-option
           v-for="item in options"
           :key="item.upKindCd"
@@ -13,8 +13,15 @@
       </el-select>
       </el-col>
       <el-col :span="8">
-      <el-input placeholder="Please Input" v-model="searchword"> 
-      </el-input>
+        <el-date-picker
+          v-model="date"
+          type="daterange"
+          range-separator="To"
+          start-placeholder="Start date"
+          end-placeholder="End date"
+          format="yyyy-MM-dd"
+          value-format="yyyyMMdd">
+        </el-date-picker>
       </el-col>
        <el-col :span="8">
       <el-button icon="el-icon-search" style="float: left" circle 
@@ -54,7 +61,6 @@
 </template>
 
 <script>
-//var convert = require('xml-js');
 
 export default {
     data() {
@@ -62,27 +68,45 @@ export default {
         searchword: '',
         items: [],
         options: [],
-        value: ''
+        upkind: '',
+        pickerOptions: {
+          shortcuts: [{
+            text: 'Last week',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', [start, end]);
+            }
+          }]
+        },
+        date: '',
       }
     },
     methods: {
       searchAnimal(){
-        var up_kind_cd = this.value; 
+        var upkind = this.upkind;
+        var date = this.date; 
 
-        if(up_kind_cd == ''){
+        var bgnde = date[0];
+        var endde = date[1];
+
+        if(upkind == ''){
           alert('선택'); 
           return; //함수 빠져나가기
         }
         
-        var url = '/openapi/service/rest/abandonmentPublicSrvc/kind';
+        var url = '/openapi/service/rest/abandonmentPublicSrvc/abandonmentPublic';
         const key = 'PizA5duILWkq9mMFf%2Bf9ti3l0fAP1g79ezIZSirAbtMCIcb90puBIJ3qBgcOE8H2RbdBSctpdCHMTASuKhpmbw%3D%3D';
-        var queryParams = '?' + encodeURIComponent('up_kind_cd') + '=' + up_kind_cd + '&' + encodeURIComponent('serviceKey') + '='+key; 
+        var queryParams = '?' + encodeURIComponent('bgnde') + '=' + bgnde + '&' + encodeURIComponent('endde') + '=' + endde + '&' + encodeURIComponent('upkind') + '=' + upkind
+        + '&' + encodeURIComponent('ServiceKey') + '=' + key; 
 
         console.log(url+queryParams)
 
         this.$http.get(url+queryParams)
         .then((response) => {
           console.log(response);
+          this.items = response.data.response.body.items.item;
         })
         .catch((error) => {
           console.log(error);
@@ -99,39 +123,8 @@ export default {
       .catch((error) => {
         console.log(error);
       }) 
-
-     // var url = '/openapi/service/rest/abandonmentPublicSrvc/abandonmentPublic'; /*URL*/
-    //  const key = 'PizA5duILWkq9mMFf%2Bf9ti3l0fAP1g79ezIZSirAbtMCIcb90puBIJ3qBgcOE8H2RbdBSctpdCHMTASuKhpmbw%3D%3D';
-   //   var queryParams = '?' + encodeURIComponent('serviceKey') + '='+key; /*Service Key*/
-      
-     /*  this.$http.get(url+queryParams)
-      .then((response) => { //ES5로 쓰면 데이터가 담기지 않음.. 출력은 되는데 데이터 담는건 불가 왜 그런지 찾아보기 
-        this.items = response.data.response.body.items.item
-        console.log(this.items)
-      })
-      .catch((error) => {
-        console.log(error);
-      }) */
     }
   }
-
-  /*  
-  URI 조회
-  http://openapi.animal.go.kr/openapi/service/rest/abandonmentPublicSrvc/abandonmentPublic?bgnde=20140301&endde=20140430&pageNo=1&numOfRows=10&ServiceKey=서비스키
-
-  -- request message
-  bgnde 검색시작일 YYYYMMDD
-  endde 검색종료일 YYYYMMDD
-  upkind 축종코드 개, 고양이, 기타(아까 그 코드)
-  kind 품종
-  upr_cd 시도코드
-  org_cd 시군구코드
-  care_reg_no 보호소번호
-  pageNo 페이지번호
-  numOfRows 페이지당 보여줄 개수
-
-  --
-  */
 </script>
 
 <style scoped>
