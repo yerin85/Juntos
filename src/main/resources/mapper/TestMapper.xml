@@ -6,4 +6,9 @@
   <select id="getUpKindList" resultType="com.example.juntos.vo.TestVO">
      SELECT upKindCd, upKindNm from tb_upkind;
   </select>
+
+   <!-- -->
+  <select id="getSidoList" resultType="com.example.juntos.vo.TestVO">
+     SELECT sidoCd, sidoNm from tb_sido;
+  </select>
 </mapper>

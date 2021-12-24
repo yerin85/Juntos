@@ -18,4 +18,9 @@ public class TestServiceImpl implements TestService{
     public List<TestVO> getUpKindList() throws Exception {
         return testDAO.getUpKindList();
     }
+
+    @Override
+    public List<TestVO> getSidoList() throws Exception {
+        return testDAO.getSidoList();
+    }
 }

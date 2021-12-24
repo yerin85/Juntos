@@ -1,18 +1,53 @@
 <template>
   <div class="hello">
     <!-- 검색옵션 -->
-    <el-row :gutter="20">
-      <el-col :span="8">
-      <el-select v-model="upkind" clearable placeholder="Select" style="float: right" >
-        <el-option
-          v-for="item in options"
-          :key="item.upKindCd"
-          :label="item.upKindNm"
-          :value="item.upKindCd">
-        </el-option>
-      </el-select>
+
+    <el-row>
+      <el-col>
+        <el-select v-model="upkind" placeholder="Select">
+          <el-option
+            v-for="item in options"
+            :key="item.upKindCd"
+            :label="item.upKindNm"
+            :value="item.upKindCd">
+          </el-option>
+        </el-select>
+        <!-- upkind 클릭시 활성화 -->
+        <el-select v-model="kind" placeholder="Select">
+          <el-option
+            v-for="item in options"
+            :key="item.upKindCd"
+            :label="item.upKindNm"
+            :value="item.upKindCd">
+          </el-option>
+        </el-select>  
       </el-col>
-      <el-col :span="8">
+    </el-row>
+
+    <el-row>
+      <el-col>
+        <el-select v-model="upkind" placeholder="Select">
+          <el-option
+            v-for="item in options"
+            :key="item.upKindCd"
+            :label="item.upKindNm"
+            :value="item.upKindCd">
+          </el-option>
+        </el-select>
+        <!-- upkind 클릭시 활성화 -->
+        <el-select v-model="kind" placeholder="Select">
+          <el-option
+            v-for="item in options"
+            :key="item.upKindCd"
+            :label="item.upKindNm"
+            :value="item.upKindCd">
+          </el-option>
+        </el-select>  
+      </el-col>
+    </el-row>
+
+    <el-row>
+       <el-col>
         <el-date-picker
           v-model="date"
           type="daterange"
@@ -23,8 +58,11 @@
           value-format="yyyyMMdd">
         </el-date-picker>
       </el-col>
-       <el-col :span="8">
-      <el-button icon="el-icon-search" style="float: left" circle 
+    </el-row>
+
+    <el-row>
+       <el-col>
+      <el-button icon="el-icon-search" circle 
        @click="searchAnimal"></el-button>
       </el-col>
     </el-row>

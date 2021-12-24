@@ -13,6 +13,7 @@ axios.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencod
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 
 Vue.prototype.$http = axios; //이렇게 하면 다른 js에서 $http로 axios를 사용할 수 있음, 전역으로 사용가능
+Vue.prototype.$key = 'PizA5duILWkq9mMFf%2Bf9ti3l0fAP1g79ezIZSirAbtMCIcb90puBIJ3qBgcOE8H2RbdBSctpdCHMTASuKhpmbw%3D%3D'; //ServiceKey 
 
 new Vue({
   router,

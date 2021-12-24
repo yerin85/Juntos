@@ -19,4 +19,8 @@ public class TestDAO {
     public List<TestVO> getUpKindList() throws Exception{
         return sqlSession.selectList(namespace + ".getUpKindList");
     }
+
+    public List<TestVO> getSidoList() throws Exception{
+        return sqlSession.selectList(namespace + ".getSidoList");
+    }
 }
