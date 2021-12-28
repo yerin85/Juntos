@@ -11,4 +11,11 @@
   <select id="getSidoList" resultType="com.example.juntos.vo.TestVO">
      SELECT sidoCd, sidoNm from tb_sido;
   </select>
+
+  <insert id="insertShelter">
+      insert ignore into tb_shelter (shelterCd, shelterNm)
+      values (#{shelterCd}, #{shelterNm})
+  </insert>
+
+  
 </mapper>

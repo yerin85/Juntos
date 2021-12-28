@@ -21,7 +21,9 @@
             :label="item.orgdownNm"
             :value="item.orgCd">
           </el-option>
-        </el-select>  
+        </el-select>
+        <p> {{locate}}//// {{locateSub}}</p>  
+        
       </el-col>
     </el-row>
 
@@ -69,6 +71,8 @@ export default {
         locateSub: '',
         sidolist: [],
         sgglist: [
+          {orgdownNm: "전체",
+           orgCd: 0}
         ],
       }
     },
@@ -84,13 +88,20 @@ export default {
     },
     methods: {
       sidoToSsg(){
+        this.locateSub = null; //값 초기화
         var url = '/openapi/service/rest/abandonmentPublicSrvc/sigungu';
         var queryParams = '?' + encodeURIComponent('upr_cd') + '=' + this.locate + '&' + encodeURIComponent('ServiceKey') + '=' + this.$key; 
 
         this.$http.get(url+queryParams)
         .then((response) => {
-           this.sgglist = response.data.response.body.items.item;
-        })
+          
+          if(response.data.response.body.items.item !== undefined) { //값이 없는 경우 undefined로 판별
+            this.sgglist = response.data.response.body.items.item;
+            this.sgglist.unshift( 
+              {orgdownNm: "전체",
+               orgCd: 0});
+          }
+          })
         .catch((error) => {
           console.log(error);
         })
