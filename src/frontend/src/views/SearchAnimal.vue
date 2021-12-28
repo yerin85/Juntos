@@ -96,6 +96,12 @@
             </template>
         </el-table-column>
       </el-table>
+      <el-pagination
+        :page-size="10"
+        layout="prev, pager, next"
+        :total="this.pageNo"
+        @current-change="searchAnimal">
+      </el-pagination>
     </el-row>
 
   </div>
@@ -131,10 +137,19 @@ export default {
           {orgdownNm: "전체",
            orgCd: 0}
         ],
+        pageNo: 0,
+        total: '',
+        page: '',
       }
     },
     methods: {
-      searchAnimal(){
+      searchAnimal(val){
+        window.scrollTo(0, 0); //상단이동
+        if(val !== PointerEvent){
+          this.page = val;
+        }else{
+          this.page = 1;
+        }
         var upkind = this.upkind;
         /* var kind = this.kind;
         var locate = this.locate;
@@ -151,13 +166,13 @@ export default {
         
         var url = '/openapi/service/rest/abandonmentPublicSrvc/abandonmentPublic';
         var queryParams = '?' + encodeURIComponent('bgnde') + '=' + bgnde + '&' + encodeURIComponent('endde') + '=' + endde + '&' + encodeURIComponent('upkind') + '=' + upkind
-        + '&' + encodeURIComponent('ServiceKey') + '=' + this.$key; 
-
-        console.log(url+queryParams)
+        + '&' + encodeURIComponent('pageNo') + '=' + this.page
+        + '&' + encodeURIComponent('numOfRows') + '=' + 10
+        + '&' + encodeURIComponent('ServiceKey') + '=' + this.$key 
 
         this.$http.get(url+queryParams)
         .then((response) => {
-          console.log(response);
+          this.pageNo = response.data.response.body.totalCount / 10;
           this.items = response.data.response.body.items.item;
         })
         .catch((error) => {
@@ -222,6 +237,9 @@ export default {
       .catch((error) => {
         console.log(error);
       })
+    },
+    mounted(){
+      window.scrollTo(0, 0);
     }
   }
 </script>
