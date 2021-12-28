@@ -10,10 +10,8 @@
             :key="item.sidoCd"
             :label="item.sidoNm"
             :value="item.sidoCd">
-          <!-- <el-option v-for="{ name, id } in options" :key="id" :label="name" :value="id"></el-option> -->
           </el-option>
         </el-select>
-        <!-- upkind 클릭시 활성화 -->
         <el-select v-model="locateSub" placeholder="시군구" no-data-text>
           <el-option
             v-for="item in sgglist"
@@ -23,7 +21,6 @@
           </el-option>
         </el-select>
         <p> {{locate}}//// {{locateSub}}</p>  
-        
       </el-col>
     </el-row>
 
