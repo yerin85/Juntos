@@ -20,6 +20,11 @@ const routes = [
         path: '/search/shelter', //보호소 검색
         name: 'SearchShelter', 
         component:  () => import('../views/SearchShelter.vue')
+    },
+    {
+        path: '/detail/:desertionNo', // detail
+        name: 'DetailAnimal', 
+        component:  () => import('../views/DetailAnimal.vue')
     }
 ]
 

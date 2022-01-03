@@ -1,6 +1,7 @@
 <template>
   <div class="hello">
     
+    <!-- search start -->
     <!-- 종류 검색옵션 -->
     <el-row>
       <el-col>
@@ -54,7 +55,7 @@
         <el-date-picker
           v-model="date"
           type="daterange"
-          range-separator="To"
+          range-separator="~"
           start-placeholder="Start date"
           end-placeholder="End date"
           format="yyyy-MM-dd"
@@ -62,25 +63,27 @@
         </el-date-picker>
       </el-col>
     </el-row>
-
+    
     <el-row>
        <el-col>
       <el-button icon="el-icon-search" circle 
        @click="searchAnimal"></el-button>
       </el-col>
     </el-row>
-
-     <!-- 테이블 -->
+    <!-- search end -->
+    <!-- table start -->
     <el-row>
-        <el-table :data="items" border style="width: 100%">
+        <el-table :data="items" border style="width: 100%" >
         <el-table-column  align="center" label="사진">
             <template slot-scope="scope" class="image-slot">
-                <el-image style="width: 200px; height: 200px" :src="scope.row.popfile" lazy>
-                </el-image>
+                  <router-link :to="{name: 'DetailAnimal', params: { desertionNo: scope.row.desertionNo}}">  
+                  <el-image style="width: 200px; height: 200px" :src="scope.row.popfile" lazy>
+                  </el-image>
+                  </router-link>
             </template>
         </el-table-column>
         <el-table-column  align="center" label="특징">
-            <template slot-scope="scope">
+            <template slot-scope="scope"> 
                 품종: <span>{{scope.row.kindCd}}</span><br>
                 성별: <span>{{scope.row.sexCd}}</span><br>
                 발견장소: <span>{{scope.row.happenPlace}}</span><br>
@@ -96,6 +99,7 @@
             </template>
         </el-table-column>
       </el-table>
+      <!-- table end -->
       <el-pagination
         :page-size="10"
         layout="prev, pager, next"
@@ -143,15 +147,17 @@ export default {
       }
     },
     methods: {
+      /* 조건검색*/
       searchAnimal(val){
         window.scrollTo(0, 0); //상단이동
-        if(val !== PointerEvent){
+
+        if(val !== PointerEvent){ //페이지 번호 세팅
           this.page = val;
         }else{
           this.page = 1;
         }
-        var upkind = this.upkind;
-        /* var kind = this.kind;
+        /* var upkind = this.upkind;
+        var kind = this.kind;
         var locate = this.locate;
         var locateSub = this.locateSub; */
         var date = this.date; 
@@ -159,26 +165,46 @@ export default {
         var bgnde = date[0];
         var endde = date[1];
 
-        if(upkind == ''){
-          alert('선택'); 
-          return; //함수 빠져나가기
+        var url = '/openapi/service/rest/abandonmentPublicSrvc/abandonmentPublic';
+        var queryParams = '?' + encodeURIComponent('bgnde') + '=' + bgnde + '&' + encodeURIComponent('endde') + '=' + endde
+
+        // 검증
+        // upkind - kind, locate - locateSub 
+        if(this.upkind !== ''){
+          queryParams += '&' + encodeURIComponent('upkind') + '=' + this.upkind;
+          if(this.kind == null){
+             //
+          }else{
+            queryParams += '&' + encodeURIComponent('kind') + '=' + this.kind;
+          }
+        }
+
+        if(this.locate !== ''){
+          queryParams += '&' + encodeURIComponent('upr_cd') + '=' + this.locate;
+          if(this.locateSub == null){
+            //
+          }else{
+            queryParams += '&' + encodeURIComponent('org_cd') + '=' + this.locateSub;
+          }
         }
         
-        var url = '/openapi/service/rest/abandonmentPublicSrvc/abandonmentPublic';
-        var queryParams = '?' + encodeURIComponent('bgnde') + '=' + bgnde + '&' + encodeURIComponent('endde') + '=' + endde + '&' + encodeURIComponent('upkind') + '=' + upkind
-        + '&' + encodeURIComponent('pageNo') + '=' + this.page
+        queryParams += '&' + encodeURIComponent('pageNo') + '=' + this.page
         + '&' + encodeURIComponent('numOfRows') + '=' + 10
         + '&' + encodeURIComponent('ServiceKey') + '=' + this.$key 
+
+        console.log(url+queryParams)
 
         this.$http.get(url+queryParams)
         .then((response) => {
           this.pageNo = response.data.response.body.totalCount / 10;
           this.items = response.data.response.body.items.item;
+          console.log(this.items)
         })
         .catch((error) => {
           console.log(error);
         }) 
       },
+      /* 시도 selectbox 선택시 시군구 selectbox 활성화 */
       sidoToSsg(){
         this.locateSub = null; //값 초기화
         var url = '/openapi/service/rest/abandonmentPublicSrvc/sigungu';
@@ -198,6 +224,7 @@ export default {
           console.log(error);
         })
       },
+      /* 축종 selectbox 선택시 품종 selectbox 활성화 */
       upkindToKind(){
         this.kind = null; //값 초기화
         var url = '/openapi/service/rest/abandonmentPublicSrvc/kind';
@@ -208,7 +235,6 @@ export default {
           
           if(response.data.response.body.items.item !== undefined) { //값이 없는 경우 undefined로 판별
             this.kindlist = response.data.response.body.items.item;
-            console.log(this.kindlist)
           }
           })
         .catch((error) => {
@@ -219,8 +245,8 @@ export default {
     },
     created(){
 
-      //upckind option box data갖고오기
-      this.$http.get("http://localhost:8080/api/test2")
+      /* 축종 데이터 갖고오기 */
+      this.$http.get("http://localhost:8080/api/upkindlist")
       .then((response) => {
         this.options = response.data;
       })
@@ -228,7 +254,7 @@ export default {
         console.log(error);
       })
       
-      //시도 데이터 갖고오기
+      /* 시도 데이터 갖고오기 */
       this.$http.get("http://localhost:8080/api/sidolist")
       .then((response) => {
         console.log(response)
@@ -237,9 +263,6 @@ export default {
       .catch((error) => {
         console.log(error);
       })
-    },
-    mounted(){
-      window.scrollTo(0, 0);
     }
   }
 </script>

@@ -24,7 +24,7 @@ public class TestController {
         return "this is test";
     }
 
-    @RequestMapping(value="/test2", method = RequestMethod.GET)
+    @RequestMapping(value="/upkindlist", method = RequestMethod.GET)
     public List<TestVO> getUpKindList() throws Exception{
         return testService.getUpKindList();
     }
