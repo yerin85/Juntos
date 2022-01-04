@@ -21,6 +21,24 @@ export default {
       window.console.log('body:',body);
 
     });
+  },
+  methods:{
+   /*  shareStoryWeb () {
+      this.$kakao.Story.share({
+        url: 'https://github.com/eggplantiny/vue-kakao-sdk',
+        text: 'Test story share with vue-kakao-sdk'
+      })
+    },
+    loginWithKakao () {
+      this.$kakao.Auth.login({
+        success (authObj) {
+          alert(JSON.stringify(authObj))
+        },
+        fail (err) {
+          alert(JSON.stringify(err))
+        }
+      })
+    } */
   }
 }
 </script>

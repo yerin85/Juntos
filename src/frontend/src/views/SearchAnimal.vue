@@ -156,12 +156,8 @@ export default {
         }else{
           this.page = 1;
         }
-        /* var upkind = this.upkind;
-        var kind = this.kind;
-        var locate = this.locate;
-        var locateSub = this.locateSub; */
-        var date = this.date; 
 
+        var date = this.date; 
         var bgnde = date[0];
         var endde = date[1];
 
@@ -169,11 +165,10 @@ export default {
         var queryParams = '?' + encodeURIComponent('bgnde') + '=' + bgnde + '&' + encodeURIComponent('endde') + '=' + endde
 
         // 검증
-        // upkind - kind, locate - locateSub 
         if(this.upkind !== ''){
           queryParams += '&' + encodeURIComponent('upkind') + '=' + this.upkind;
           if(this.kind == null){
-             //
+             //upkind를 선택했을 때 null로 초기화시켜서 기본값이 null임
           }else{
             queryParams += '&' + encodeURIComponent('kind') + '=' + this.kind;
           }
@@ -182,7 +177,7 @@ export default {
         if(this.locate !== ''){
           queryParams += '&' + encodeURIComponent('upr_cd') + '=' + this.locate;
           if(this.locateSub == null){
-            //
+             //locate를 선택했을 때 null로 초기화시켜서 기본값이 null임
           }else{
             queryParams += '&' + encodeURIComponent('org_cd') + '=' + this.locateSub;
           }
@@ -198,7 +193,6 @@ export default {
         .then((response) => {
           this.pageNo = response.data.response.body.totalCount / 10;
           this.items = response.data.response.body.items.item;
-          console.log(this.items)
         })
         .catch((error) => {
           console.log(error);
