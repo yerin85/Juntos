@@ -34,4 +34,6 @@ public class TestController {
     public List<TestVO> getSidoList() throws Exception{
         return testService.getSidoList();
     }
+
+    //insert query 
 }

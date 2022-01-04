@@ -25,6 +25,11 @@ const routes = [
         path: '/detail/:desertionNo', // detail
         name: 'DetailAnimal', 
         component:  () => import('../views/DetailAnimal.vue')
+    },
+    {
+        path: '/save', // detail
+        name: 'saveDB', 
+        component:  () => import('../views/saveDB.vue')
     }
 ]
 
