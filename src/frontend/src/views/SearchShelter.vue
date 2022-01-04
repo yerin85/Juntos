@@ -1,7 +1,7 @@
 <template>
   <div class="hello">
     <!-- 검색옵션 -->
-
+    <div id="map"></div>
     <el-row>
       <el-col>
         <el-select v-model="locate" placeholder="시도" @change="sidoToSsg" >
@@ -102,7 +102,27 @@ export default {
         .catch((error) => {
           console.log(error);
         })
+      },
+      initMap() {
+        const container = document.getElementById("map");
+        const options = {
+          center: new kakao.maps.LatLng(33.450701, 126.570667),
+          level: 5,
+        };
+        this.map = new kakao.maps.Map(container, options);
       }
+    },
+    mounted() {
+      if (window.kakao && window.kakao.maps) {
+        this.initMap();
+      } else {
+        const script = document.createElement("script");
+        /* global kakao */
+        script.onload = () => kakao.maps.load(this.initMap);
+        script.src =
+          "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=db5715be56a04ae7aa26b2b026e609b3";
+        document.head.appendChild(script);
+    }
     }
   }
 </script>
@@ -120,5 +140,10 @@ export default {
   
   .el-aside {
     color: #333;
+  }
+
+  #map {
+    width: 400px;
+    height: 400px;
   }
 </style>
